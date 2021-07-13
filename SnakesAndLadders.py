@@ -8,7 +8,7 @@ SIZE_OF_TABLE = 100  # Number of the squares in the board
 
 # Pre-game text
 print("Welcome to Davidalk THE ONE AND ONLY Game board.\n"
-      "Today we gonna play ladders & Snakes\n"
+      "Today we gonna play Snakes and Ladders\n"
       "Good luck for everyone!")
 
 # Define players
