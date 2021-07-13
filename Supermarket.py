@@ -18,56 +18,54 @@ while isShopping:
     sub_product = {}
 
     if choice == '1':  # Choice one for get a new item for the list.
-        product_name = input("Please enter the product name you would like to add: ")
-        product_cost = input("Please enter the product cost value: ")
-        product_quantity = input("Please enter how much %s you want to buy: " % product_name)
+        name = input("Please enter the product name you would like to add: ")
+        sub_product['cost'] = int(input("Please enter the product cost value: "))
+        sub_product['quantity'] = int(input("Please enter how much %s you want to buy: " % name))
         if not shopping_list:  # Check if the list empty.
-            sub_product[product_cost] = product_quantity
-            product[product_name] = sub_product
+            product[name] = sub_product
             shopping_list.append(product)
         else:  # If the list isn't empty check if the item is exist already.
             isExist = False
             for item in shopping_list:
-                if product_name in item:
-                    old_quantity = int(list(item[product_name].values())[0])
-                    sub_product[product_cost] = old_quantity + int(product_quantity)
-                    product[product_name] = sub_product
+                if name in item:
+                    sub_product['quantity'] += item[name]['quantity']
+                    product[name] = sub_product
                     shopping_list.remove(item)
                     shopping_list.append(product)
                     isExist = True
             if not isExist:  # If the item isn't exist add it.
-                sub_product[product_cost] = product_quantity
-                product[product_name] = sub_product
+                sub_product[sub_product['cost']] = sub_product['quantity']
+                product[name] = sub_product
                 shopping_list.append(product)
     elif choice == '2':  # Choice two for remove item from the list.
-        product_name = input("Please enter the product name you would like to remove: ")
-        product_quantity = int(input("Please enter how much %s you want to remove: " % product_name))
+        name = input("Please enter the product name you would like to remove: ")
+        sub_product['quantity'] = int(input("Please enter how much %s you want to remove: " % name))
         if not shopping_list:  # Check if the list empty.
             print("You cannot remove from the cart if there is no cart ;)")
         else:  # If the list isn't empty check if the item is exist already.
             isExist = False
             for item in shopping_list:
-                if product_name in item:
-                    old_quantity = int(list(item[product_name].values())[0])
-                    product_cost = list(item[list(item)[0]])[0]
-                    if old_quantity > product_quantity:  # Check if there is enough from the item or remove it all.
-                        sub_product[product_cost] = old_quantity - int(product_quantity)
-                        product[product_name] = sub_product
+                if name in item:
+                    # Check if there is enough from the item or remove it all.
+                    if item[name]['quantity'] > sub_product['quantity']:
+                        sub_product['cost'] = item[name]['quantity']
+                        sub_product['quantity'] = item[name]['quantity'] - sub_product['quantity']
+                        product[name] = sub_product
                         shopping_list.remove(item)
                         shopping_list.append(product)
                     else:
                         shopping_list.remove(item)
                     isExist = True
             if not isExist:  # If the item isn't exist we can't remove it.
-                print("\nProduct %s doesn't exist in your cart." % product_name)
+                print("\nProduct %s doesn't exist in your cart." % name)
     elif choice == '3':  # Choice three for printing the receipt.
         for item in shopping_list:  # Print a nice receipt for the customer.
-            item_name = list(item)[0]
-            item_cost = int(list(item[list(item)[0]])[0])
-            item_quantity = int(item[list(item)[0]][list(item[list(item)[0]])[0]])
-            total = item_cost * item_quantity
-            print(item_name, "                     price", item_cost)
-            print("X", item_quantity, "             total price", total)
+            name = list(item)[0]
+            cost = item[name]['cost']
+            quantity = item[name]['quantity']
+            total = cost * quantity
+            print(name, "                     price", cost)
+            print("X", quantity, "             total price", total)
             summary += total  # Calculate the total cost.
         print("\nYour total bill amount is %d.\n" % summary)
         isShopping = False
